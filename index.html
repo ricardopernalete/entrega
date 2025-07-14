@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parchís Star - Edición Nocturna</title>
+  <style>
+    /* Estilos base */
+    :root {
+      --color-primary: #e74c3c;
+      --color-secondary: #2c3e50;
+      --color-dark: #1a1a1a;
+      --color-gray: #333333;
+      --color-light-gray: #4d4d4d;
+      --color-text: #f0f0f0;
+      --color-text-light: #ffffff;
+      --color-accent: #c0392b;
+      --color-success: #2ecc71;
+      --color-warning: #f39c12;
+      --color-error: #e74c3c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--color-dark);
+      color: var(--color-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: radial-gradient(circle at 50% 50%, var(--color-gray) 0%, var(--color-dark) 100%);
+    }
+
+    /* Pantalla de inicio */
+    .start-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, rgba(26,26,26,0.9) 0%, rgba(44,44,44,0.9) 100%);
+      text-align: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .start-screen::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, var(--color-primary) 0%, transparent 70%);
+      opacity: 0.1;
+      z-index: -1;
+    }
+
+    .start-screen h1 {
+      font-size: 3.5rem;
+      margin-bottom: 2rem;
+      color: var(--color-text-light);
+      text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    .start-screen p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin-bottom: 3rem;
+      color: var(--color-text);
+    }
+
+    .btn {
+      background-color: var(--color-primary);
+      color: var(--color-text-light);
+      border: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin: 10px;
+      min-width: 220px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+    }
+
+    .btn:hover::after {
+      transform: translateX(100%);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      border: 2px solid var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--color-primary);
+      color: var(--color-text-light);
+    }
+
+    /* Pantalla de juego */
+    .app-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+      display: none;
+    }
+
+    .game-container {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      grid-template-rows: auto 1fr auto;
+      gap: 20px;
+      height: calc(100vh - 40px);
+    }
+
+    /* Tablero de juego */
+    .board {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      background-color: var(--color-gray);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--color-light-gray);
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .board::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, transparent 0%, rgba(231, 76, 60, 0.05) 100%);
+      pointer-events: none;
+    }
+
+    .piece {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      position: absolute;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+      z-index: 10;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .piece::after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      pointer-events: none;
+    }
+
+    .piece:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 15px rgba(255,255,255,0.5);
+    }
+
+    .piece.player-1 {
+      background-color: var(--color-primary);
+      box-shadow: 0 0 10px rgba(231, 76, 60, 0.7);
+    }
+
+    .piece.player-2 {
+      background-color: #3498db;
+      box-shadow: 0 0 10px rgba(52, 152, 219, 0.7);
+    }
+
+    .piece.player-3 {
+      background-color: #f1c40f;
+      box-shadow: 0 0 10px rgba(241, 196, 15, 0.7);
+    }
+
+    .piece.player-4 {
+      background-color: #2ecc71;
+      box-shadow: 0 0 10px rgba(46, 204, 113, 0.7);
+    }
+
+    /* Panel de control */
+    .control-panel {
+      grid-column: 2;
+      grid-row: 1;
+      background-color: var(--color-gray);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      border: 1px solid var(--color-light-gray);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .player-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .turn-indicator {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--color-primary);
+      text-shadow: 0 0 5px rgba(231, 76, 60, 0.5);
+    }
+
+    .player-name {
+      font-size: 1rem;
+      color: var(--color-text-light);
+      background-color: rgba(0,0,0,0.3);
+      padding: 5px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--color-light-gray);
+    }
+
+    .dice-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 25px;
+      background-color: rgba(0,0,0,0.3);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid var(--color-light-gray);
+    }
+
+    .dice {
+      width: 70px;
+      height: 70px;
+      background-color: var(--color-text-light);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: bold;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+      color: var(--color-dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dice::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.2) 100%);
+      opacity: 0.3;
+    }
+
+    .powerups-container {
+      margin-bottom: 20px;
+    }
+
+    .panel-title {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: var(--color-text-light);
+      display: flex;
+      align-items: center;
+    }
+
+    .panel-title::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background-color: var(--color-primary);
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .powerups-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .powerup-card {
+      background-color: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid var(--color-light-gray);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .powerup-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      border-color: var(--color-primary);
+    }
+
+    .powerup-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .powerup-card.active {
+      background-color: rgba(231, 76, 60, 0.2);
+      border-color: var(--color-primary);
+    }
+
+    .powerup-name {
+      font-size: 0.8rem;
+      margin-bottom: 5px;
+      color: var(--color-text-light);
+    }
+
+    .powerup-count {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: var(--color-primary);
+    }
+
+    /* Panel de predicción */
+    .prediction-panel {
+      grid-column: 2;
+      grid-row: 2;
+      background-color: var(--color-gray);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      border: 1px solid var(--color-light-gray);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .prediction-result {
+      margin-top: 15px;
+      padding: 15px;
+      background-color: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      border-left: 4px solid var(--color-primary);
+      flex-grow: 1;
+      overflow-y: auto;
+      max-height: 300px;
+    }
+
+    .prediction-item {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: rgba(0,0,0,0.2);
+      border-radius: 5px;
+      border-left: 2px solid var(--color-primary);
+    }
+
+    .prediction-item strong {
+      color: var(--color-primary);
+    }
+
+    .prediction-item.defense {
+      background-color: rgba(231, 76, 60, 0.1);
+      border-left-color: #e74c3c;
+    }
+
+    /* Log del juego */
+    .game-log {
+      grid-column: 1 / span 2;
+      grid-row: 3;
+      background-color: var(--color-gray);
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      border: 1px solid var(--color-light-gray);
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    .game-log::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .game-log::-webkit-scrollbar-track {
+      background: var(--color-dark);
+      border-radius: 10px;
+    }
+
+    .game-log::-webkit-scrollbar-thumb {
+      background-color: var(--color-primary);
+      border-radius: 10px;
+    }
+
+    .log-entry {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--color-light-gray);
+      font-size: 0.9rem;
+    }
+
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+
+    .log-entry.player-1 {
+      color: var(--color-primary);
+    }
+
+    .log-entry.player-2 {
+      color: #3498db;
+    }
+
+    /* Modales */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background-color: var(--color-gray);
+      border-radius: 10px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid var(--color-primary);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 1.5rem;
+      color: var(--color-text);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .modal-close:hover {
+      color: var(--color-primary);
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: var(--color-primary);
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--color-text-light);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 5px;
+      border: 1px solid var(--color-light-gray);
+      background-color: var(--color-dark);
+      color: var(--color-text-light);
+      font-size: 1rem;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.3);
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: var(--color-primary);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Animaciones */
+    @keyframes diceRoll {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.2); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    .rolling {
+      animation: diceRoll 0.5s ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+    }
+
+    .pulse {
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Efectos especiales */
+    .glow {
+      filter: drop-shadow(0 0 5px currentColor);
+    }
+
+    /* Notificaciones */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 5px;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 1000;
+      transform: translateX(200%);
+      transition: transform 0.3s ease;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      background-color: var(--color-success);
+    }
+
+    .notification.error {
+      background-color: var(--color-error);
+    }
+
+    .notification.warning {
+      background-color: var(--color-warning);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .game-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .board {
+        grid-column: 1;
+        grid-row: 2;
+        aspect-ratio: 1/1;
+      }
+
+      .control-panel {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .prediction-panel {
+        grid-column: 1;
+        grid-row: 3;
+      }
+
+      .game-log {
+        grid-column: 1;
+        grid-row: 4;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .start-screen h1 {
+        font-size: 2.5rem;
+      }
+
+      .btn {
+        padding: 12px 25px;
+        min-width: 200px;
+      }
+
+      .powerups-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Pantalla de inicio -->
+  <div id="startScreen" class="start-screen">
+    <h1>PARCHÍS STAR</h1>
+    <p>El juego clásico reinventado con un diseño moderno y potenciadores estratégicos</p>
+    <button id="newGameBtn" class="btn btn-primary">Nueva Partida</button>
+    <button id="joinGameBtn" class="btn btn-secondary">Unirse a Partida</button>
+  </div>
+
+  <!-- Pantalla de juego -->
+  <div class="app-container" id="gameScreen">
+    <div class="game-container">
+      <!-- Tablero de juego -->
+      <div class="board" id="gameBoard"></div>
+      
+      <!-- Panel de control -->
+      <div class="control-panel">
+        <div class="player-info">
+          <div class="turn-indicator" id="turnIndicator">Turno: Jugador 1</div>
+          <div class="player-name" id="playerName">Tú</div>
+        </div>
+        
+        <div class="dice-container">
+          <div class="dice" id="currentDice">0</div>
+          <button id="rollDice" class="btn btn-primary">Tirar dado</button>
+        </div>
+        
+        <div class="powerups-container">
+          <h3 class="panel-title">Tus potenciadores</h3>
+          <div class="powerups-grid" id="myPowerups"></div>
+        </div>
+        
+        <div class="opponent-info">
+          <h3 class="panel-title">Potenciadores del oponente</h3>
+          <div class="powerups-grid" id="opponentPowerups"></div>
+        </div>
+      </div>
+      
+      <!-- Panel de predicción -->
+      <div class="prediction-panel">
+        <h3 class="panel-title">Predicción de jugadas</h3>
+        <button id="predictBtn" class="btn btn-secondary">Predecir jugada</button>
+        <div class="prediction-result" id="predictionResult">
+          <div class="prediction-item">Usa el botón "Predecir jugada" para ver las posibles jugadas del oponente</div>
+        </div>
+      </div>
+      
+      <!-- Log del juego -->
+      <div class="game-log" id="gameLog">
+        <div class="log-entry">Bienvenido a Parchís Star. ¡Que comience el juego!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para nueva partida -->
+  <div id="newGameModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <h3 class="modal-title">Crear Nueva Partida</h3>
+      <div class="form-group">
+        <label for="playerNameInput" class="form-label">Tu Nombre</label>
+        <input type="text" id="playerNameInput" class="form-input" placeholder="Ingresa tu nombre">
+      </div>
+      <div class="form-group">
+        <label for="gamePassword" class="form-label">Contraseña (opcional)</label>
+        <input type="password" id="gamePassword" class="form-input" placeholder="Contraseña para la partida">
+      </div>
+      <button id="createGameBtn" class="btn btn-primary">Crear Partida</button>
+      <div id="createGameStatus" style="margin-top: 15px;"></div>
+    </div>
+  </div>
+
+  <!-- Modal para unirse a partida -->
+  <div id="joinGameModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <h3 class="modal-title">Unirse a Partida</h3>
+      <div class="form-group">
+        <label for="joinPlayerName" class="form-label">Tu Nombre</label>
+        <input type="text" id="joinPlayerName" class="form-input" placeholder="Ingresa tu nombre">
+      </div>
+      <div class="form-group">
+        <label for="gameCode" class="form-label">Código de Partida</label>
+        <input type="text" id="gameCode" class="form-input" placeholder="Ingresa el código de partida">
+      </div>
+      <div class="form-group">
+        <label for="joinGamePassword" class="form-label">Contraseña (si aplica)</label>
+        <input type="password" id="joinGamePassword" class="form-input" placeholder="Contraseña de la partida">
+      </div>
+      <button id="joinGameBtn" class="btn btn-primary">Unirse</button>
+      <div id="joinGameStatus" style="margin-top: 15px;"></div>
+    </div>
+  </div>
+
+  <!-- Notificaciones -->
+  <div id="notification" class="notification"></div>
+
+  <script>
+    // Constantes del juego
+    const PLAYER_COLORS = ['#e74c3c', '#3498db', '#f1c40f', '#2ecc71'];
+    const POWERUPS = {
+      double_dice: { name: 'Dado Doble', count: 2, color: '#e74c3c' },
+      shield: { name: 'Escudo', count: 1, color: '#3498db' },
+      teleport: { name: 'Teletransporte', count: 1, color: '#9b59b6' }
+    };
+
+    // Configuración de la API
+    const API_BASE_URL = 'https://tu-api-parchis.com/v1'; // Reemplazar con tu URL real
+    const API_ENDPOINTS = {
+      createGame: '/games',
+      joinGame: '/games/join',
+      gameStatus: '/games/status',
+      rollDice: '/games/roll',
+      makeMove: '/games/move',
+      usePowerup: '/games/powerup',
+      getPrediction: '/games/predict'
+    };
+
+    // Clase para manejar las llamadas a la API
+    class ParchisAPI {
+      static async request(endpoint, method = 'GET', data = null, authToken = null) {
+        const url = API_BASE_URL + endpoint;
+        const headers = {
+          'Content-Type': 'application/json'
+        };
+
+        if (authToken) {
+          headers['Authorization'] = `Bearer ${authToken}`;
+        }
+
+        const config = {
+          method,
+          headers
+        };
+
+        if (data) {
+          config.body = JSON.stringify(data);
+        }
+
+        try {
+          const response = await fetch(url, config);
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.message || 'Error en la solicitud');
+          }
+
+          return result;
+        } catch (error) {
+          console.error('Error en la solicitud API:', error);
+          throw error;
+        }
+      }
+
+      static async createGame(playerName, password = '') {
+        return this.request(API_ENDPOINTS.createGame, 'POST', {
+          playerName,
+          password
+        });
+      }
+
+      static async joinGame(gameCode, playerName, password = '') {
+        return this.request(API_ENDPOINTS.joinGame, 'POST', {
+          gameCode,
+          playerName,
+          password
+        });
+      }
+
+      static async getGameStatus(gameId, playerToken) {
+        return this.request(`${API_ENDPOINTS.gameStatus}/${gameId}`, 'GET', null, playerToken);
+      }
+
+      static async rollDice(gameId, playerToken) {
+        return this.request(`${API_ENDPOINTS.rollDice}/${gameId}`, 'POST', null, playerToken);
+      }
+
+      static async makeMove(gameId, pieceId, playerToken) {
+        return this.request(`${API_ENDPOINTS.makeMove}/${gameId}`, 'POST', { pieceId }, playerToken);
+      }
+
+      static async usePowerup(gameId, powerupId, playerToken) {
+        return this.request(`${API_ENDPOINTS.usePowerup}/${gameId}`, 'POST', { powerupId }, playerToken);
+      }
+
+      static async getPrediction(gameId, playerToken) {
+        return this.request(`${API_ENDPOINTS.getPrediction}/${gameId}`, 'GET', null, playerToken);
+      }
+    }
+
+    // Clase principal del juego
+    class ParchisGame {
+      constructor() {
+        this.gameId = null;
+        this.playerId = null;
+        this.playerToken = null;
+        this.players = [];
+        this.currentTurn = 0;
+        this.diceValue = 0;
+        this.pieces = [];
+        this.powerups = {};
+        this.usedPowerups = {};
+        this.gameLog = [];
+        this.prediction = null;
+        this.socket = null;
+        this.pollingInterval = null;
+        
+        this.initElements();
+        this.initEventListeners();
+      }
+      
+      initElements() {
+        this.elements = {
+          startScreen: document.getElementById('startScreen'),
+          gameScreen: document.getElementById('gameScreen'),
+          newGameBtn: document.getElementById('newGameBtn'),
+          joinGameBtn: document.getElementById('joinGameBtn'),
+          gameBoard: document.getElementById('gameBoard'),
+          currentDice: document.getElementById('currentDice'),
+          rollDiceBtn: document.getElementById('rollDice'),
+          myPowerupsContainer: document.getElementById('myPowerups'),
+          opponentPowerupsContainer: document.getElementById('opponentPowerups'),
+          predictBtn: document.getElementById('predictBtn'),
+          predictionResult: document.getElementById('predictionResult'),
+          gameLog: document.getElementById('gameLog'),
+          turnIndicator: document.getElementById('turnIndicator'),
+          playerName: document.getElementById('playerName'),
+          newGameModal: document.getElementById('newGameModal'),
+          joinGameModal: document.getElementById('joinGameModal'),
+          playerNameInput: document.getElementById('playerNameInput'),
+          gamePassword: document.getElementById('gamePassword'),
+          createGameBtn: document.getElementById('createGameBtn'),
+          createGameStatus: document.getElementById('createGameStatus'),
+          joinPlayerName: document.getElementById('joinPlayerName'),
+          gameCode: document.getElementById('gameCode'),
+          joinGamePassword: document.getElementById('joinGamePassword'),
+          joinGameBtnModal: document.getElementById('joinGameBtn'),
+          joinGameStatus: document.getElementById('joinGameStatus'),
+          notification: document.getElementById('notification')
+        };
+      }
+      
+      initEventListeners() {
+        // Botones principales
+        this.elements.newGameBtn.addEventListener('click', () => this.showModal('newGameModal'));
+        this.elements.joinGameBtn.addEventListener('click', () => this.showModal('joinGameModal'));
+        
+        // Botones de juego
+        this.elements.rollDiceBtn.addEventListener('click', () => this.rollDice());
+        this.elements.predictBtn.addEventListener('click', () => this.getPrediction());
+        
+        // Potenciadores
+        this.elements.myPowerupsContainer.addEventListener('click', (e) => {
+          if (e.target.closest('.powerup-card')) {
+            const powerupId = e.target.closest('.powerup-card').dataset.powerup;
+            this.usePowerup(powerupId);
+          }
+        });
+        
+        // Modal nueva partida
+        this.elements.createGameBtn.addEventListener('click', () => this.createGame());
+        document.querySelector('#newGameModal .modal-close').addEventListener('click', () => this.hideModal('newGameModal'));
+        
+        // Modal unirse a partida
+        this.elements.joinGameBtnModal.addEventListener('click', () => this.joinGame());
+        document.querySelector('#joinGameModal .modal-close').addEventListener('click', () => this.hideModal('joinGameModal'));
+      }
+      
+      showModal(modalId) {
+        this.elements[modalId].style.display = 'flex';
+      }
+      
+      hideModal(modalId) {
+        this.elements[modalId].style.display = 'none';
+      }
+      
+      showNotification(message, type = 'success') {
+        const notification = this.elements.notification;
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+          notification.classList.remove('show');
+        }, 3000);
+      }
+      
+      async createGame() {
+        const playerName = this.elements.playerNameInput.value.trim();
+        const password = this.elements.gamePassword.value.trim();
+        
+        if (!playerName) {
+          this.showNotification('Por favor ingresa tu nombre', 'error');
+          return;
+        }
+        
+        this.elements.createGameBtn.disabled = true;
+        this.elements.createGameStatus.innerHTML = '<div class="spinner"></div> Creando partida...';
+        
+        try {
+          const result = await ParchisAPI.createGame(playerName, password);
+          
+          this.gameId = result.gameId;
+          this.playerId = result.playerId;
+          this.playerToken = result.token;
+          this.players = result.players;
+          
+          // Inicializar estado del juego
+          this.initializeGame(result.gameState);
+          
+          // Mostrar pantalla de juego
+          this.elements.startScreen.style.display = 'none';
+          this.elements.gameScreen.style.display = 'block';
+          this.hideModal('newGameModal');
+          
+          // Iniciar conexión en tiempo real
+          this.setupRealTimeUpdates();
+          
+          this.showNotification('Partida creada con éxito. Código: ' + this.gameId);
+        } catch (error) {
+          console.error('Error al crear partida:', error);
+          this.elements.createGameStatus.textContent = 'Error: ' + error.message;
+          this.showNotification('Error al crear partida: ' + error.message, 'error');
+        } finally {
+          this.elements.createGameBtn.disabled = false;
+        }
+      }
+      
+      async joinGame() {
+        const playerName = this.elements.joinPlayerName.value.trim();
+        const gameCode = this.elements.gameCode.value.trim();
+        const password = this.elements.joinGamePassword.value.trim();
+        
+        if (!playerName || !gameCode) {
+          this.showNotification('Por favor ingresa tu nombre y el código de partida', 'error');
+          return;
+        }
+        
+        this.elements.joinGameBtnModal.disabled = true;
+        this.elements.joinGameStatus.innerHTML = '<div class="spinner"></div> Uniéndose a partida...';
+        
+        try {
+          const result = await ParchisAPI.joinGame(gameCode, playerName, password);
+          
+          this.gameId = result.gameId;
+          this.playerId = result.playerId;
+          this.playerToken = result.token;
+          this.players = result.players;
+          
+          // Inicializar estado del juego
+          this.initializeGame(result.gameState);
+          
+          // Mostrar pantalla de juego
+          this.elements.startScreen.style.display = 'none';
+          this.elements.gameScreen.style.display = 'block';
+          this.hideModal('joinGameModal');
+          
+          // Iniciar conexión en tiempo real
+          this.setupRealTimeUpdates();
+          
+          this.showNotification('Te has unido a la partida exitosamente');
+        } catch (error) {
+          console.error('Error al unirse a partida:', error);
+          this.elements.joinGameStatus.textContent = 'Error: ' + error.message;
+          this.showNotification('Error al unirse a partida: ' + error.message, 'error');
+        } finally {
+          this.elements.joinGameBtnModal.disabled = false;
+        }
+      }
+      
+      initializeGame(gameState) {
+        this.pieces = gameState.pieces || [];
+        this.powerups = gameState.powerups || {};
+        this.usedPowerups = gameState.usedPowerups || {};
+        this.currentTurn = gameState.currentTurn || 0;
+        this.diceValue = gameState.diceValue || 0;
+        this.gameLog = gameState.gameLog || [];
+        
+        // Renderizar juego
+        this.renderGame();
+      }
+      
+      setupRealTimeUpdates() {
+        // Implementar WebSocket o polling para actualizaciones en tiempo real
+        // Aquí usaremos polling por simplicidad
+        
+        // Limpiar intervalo anterior si existe
+        if (this.pollingInterval) {
+          clearInterval(this.pollingInterval);
+        }
+        
+        // Configurar polling cada 3 segundos
+        this.pollingInterval = setInterval(async () => {
+          try {
+            const gameState = await ParchisAPI.getGameStatus(this.gameId, this.playerToken);
+            this.updateGameState(gameState);
+          } catch (error) {
+            console.error('Error al actualizar estado del juego:', error);
+          }
+        }, 3000);
+      }
+      
+      updateGameState(gameState) {
+        // Actualizar solo si hay cambios
+        if (JSON.stringify(gameState) !== JSON.stringify({
+          pieces: this.pieces,
+          powerups: this.powerups,
+          usedPowerups: this.usedPowerups,
+          currentTurn: this.currentTurn,
+          diceValue: this.diceValue,
+          players: this.players
+        })) {
+          this.pieces = gameState.pieces || this.pieces;
+          this.powerups = gameState.powerups || this.powerups;
+          this.usedPowerups = gameState.usedPowerups || this.usedPowerups;
+          this.currentTurn = gameState.currentTurn || this.currentTurn;
+          this.diceValue = gameState.diceValue || this.diceValue;
+          this.players = gameState.players || this.players;
+          
+          // Actualizar log si hay nuevos mensajes
+          if (gameState.gameLog && gameState.gameLog.length > this.gameLog.length) {
+            this.gameLog = gameState.gameLog;
+          }
+          
+          this.renderGame();
+        }
+      }
+      
+      renderGame() {
+        this.renderBoard();
+        this.updateDice();
+        this.updatePowerups();
+        this.updateTurnIndicator();
+        this.updateControls();
+        this.updateGameLog();
+        
+        // Actualizar nombre del jugador
+        const currentPlayer = this.players.find(p => p.id === this.playerId);
+        if (currentPlayer) {
+          this.elements.playerName.textContent = currentPlayer.name;
+          this.elements.playerName.style.color = currentPlayer.color;
+        }
+      }
+      
+      renderBoard() {
+        this.elements.gameBoard.innerHTML = '';
+        
+        // Dibujar las fichas
+        this.pieces.forEach(piece => {
+          const player = this.players.find(p => p.id === piece.playerId);
+          if (!player) return;
+          
+          const isCurrentPlayer = piece.playerId === this.playerId;
+          const playerIndex = this.players.findIndex(p => p.id === piece.playerId);
+          
+          const pieceElement = document.createElement('div');
+          pieceElement.className = `piece player-${playerIndex + 1}`;
+          pieceElement.style.backgroundColor = player.color;
+          pieceElement.style.left = `${piece.position.x}%`;
+          pieceElement.style.top = `${piece.position.y}%`;
+          pieceElement.dataset.pieceId = piece.id;
+          
+          if (isCurrentPlayer && this.isMyTurn() && this.diceValue > 0) {
+            pieceElement.classList.add('glow');
+            pieceElement.addEventListener('click', () => this.movePiece(piece.id));
+          }
+          
+          this.elements.gameBoard.appendChild(pieceElement);
+        });
+      }
+      
+      updateDice() {
+        this.elements.currentDice.textContent = this.diceValue;
+        
+        if (this.diceValue > 0) {
+          this.elements.currentDice.classList.add('rolling');
+          setTimeout(() => {
+            this.elements.currentDice.classList.remove('rolling');
+          }, 500);
+        }
+      }
+      
+      updatePowerups() {
+        // Mis potenciadores
+        this.elements.myPowerups.innerHTML = '';
+        if (this.powerups[this.playerId]) {
+          Object.entries(this.powerups[this.playerId]).forEach(([powerupId, powerup]) => {
+            if (powerup.count > 0) {
+              const powerupElement = document.createElement('div');
+              powerupElement.className = 'powerup-card';
+              powerupElement.dataset.powerup = powerupId;
+              powerupElement.innerHTML = `
+                <div class="powerup-name">${powerup.name}</div>
+                <div class="powerup-count">${powerup.count}</div>
+              `;
+              powerupElement.style.borderColor = powerup.color || '#e74c3c';
+              this.elements.myPowerups.appendChild(powerupElement);
+            }
+          });
+        }
+        
+        // Potenciadores del oponente (sin mostrar los usados)
+        const opponentId = this.players.find(p => p.id !== this.playerId)?.id;
+        this.elements.opponentPowerups.innerHTML = '';
+        if (opponentId && this.powerups[opponentId]) {
+          Object.entries(this.powerups[opponentId]).forEach(([powerupId, powerup]) => {
+            if (powerup.count > 0) {
+              const powerupElement = document.createElement('div');
+              powerupElement.className = 'powerup-card opponent-powerup';
+              powerupElement.innerHTML = `
+                <div class="powerup-name">${powerup.name}</div>
+                <div class="powerup-count">${powerup.count}</div>
+              `;
+              powerupElement.style.borderColor = powerup.color || '#e74c3c';
+              this.elements.opponentPowerups.appendChild(powerupElement);
+            }
+          });
+        }
+      }
+      
+      updateTurnIndicator() {
+        const currentPlayer = this.players[this.currentTurn];
+        if (currentPlayer) {
+          this.elements.turnIndicator.textContent = `Turno: ${currentPlayer.name}`;
+          this.elements.turnIndicator.style.color = currentPlayer.color;
+          this.elements.turnIndicator.style.textShadow = `0 0 8px ${currentPlayer.color}80`;
+        }
+      }
+      
+      updateControls() {
+        const isMyTurn = this.isMyTurn();
+        this.elements.rollDiceBtn.disabled = !isMyTurn || this.diceValue > 0;
+        
+        // Deshabilitar potenciadores si no es mi turno
+        const powerupCards = this.elements.myPowerups.querySelectorAll('.powerup-card');
+        powerupCards.forEach(card => {
+          card.style.opacity = isMyTurn ? '1' : '0.5';
+          card.style.pointerEvents = isMyTurn ? 'auto' : 'none';
+        });
+      }
+      
+      updateGameLog() {
+        this.elements.gameLog.innerHTML = this.gameLog.map(log => {
+          const playerClass = log.playerId ? `player-${this.players.findIndex(p => p.id === log.playerId) + 1}` : '';
+          return `<div class="log-entry ${playerClass}">${log.message}</div>`;
+        }).join('');
+        this.elements.gameLog.scrollTop = this.elements.gameLog.scrollHeight;
+      }
+      
+      isMyTurn() {
+        return this.players[this.currentTurn]?.id === this.playerId;
+      }
+      
+      async rollDice() {
+        if (!this.isMyTurn() || this.diceValue > 0) return;
+        
+        this.elements.rollDiceBtn.disabled = true;
+        this.elements.rollDiceBtn.innerHTML = '<div class="spinner"></div>';
+        
+        try {
+          const result = await ParchisAPI.rollDice(this.gameId, this.playerToken);
+          this.diceValue = result.diceValue;
+          
+          // Verificar si se puede usar un potenciador de dado doble
+          if (this.powerups[this.playerId]?.double_dice?.count > 0 && 
+              confirm('¿Quieres usar un potenciador de Dado Doble?')) {
+            this.diceValue *= 2;
+            await this.usePowerup('double_dice', false);
+          }
+          
+          this.addToLog(`${this.players.find(p => p.id === this.playerId).name} tiró un ${this.diceValue}`, this.playerId);
+          
+          this.updateDice();
+          this.updateControls();
+        } catch (error) {
+          console.error('Error al tirar el dado:', error);
+          this.showNotification('Error al tirar el dado: ' + error.message, 'error');
+        } finally {
+          this.elements.rollDiceBtn.disabled = false;
+          this.elements.rollDiceBtn.textContent = 'Tirar dado';
+        }
+      }
+      
+      async movePiece(pieceId) {
+        if (!this.isMyTurn() || this.diceValue === 0) return;
+        
+        try {
+          const result = await ParchisAPI.makeMove(this.gameId, pieceId, this.playerToken);
+          this.updateGameState(result.gameState);
+        } catch (error) {
+          console.error('Error al mover ficha:', error);
+          this.showNotification('Error al mover ficha: ' + error.message, 'error');
+        }
+      }
+      
+      async usePowerup(powerupId, showLog = true) {
+        if (!this.isMyTurn() || !this.powerups[this.playerId]?.[powerupId]?.count) return;
+        
+        try {
+          const result = await ParchisAPI.usePowerup(this.gameId, powerupId, this.playerToken);
+          this.updateGameState(result.gameState);
+          
+          if (showLog) {
+            this.showNotification(`Potenciador ${POWERUPS[powerupId].name} usado`);
+          }
+        } catch (error) {
+          console.error('Error al usar potenciador:', error);
+          this.showNotification('Error al usar potenciador: ' + error.message, 'error');
+        }
+      }
+      
+      async getPrediction() {
+        try {
+          this.prediction = await ParchisAPI.getPrediction(this.gameId, this.playerToken);
+          this.displayPrediction();
+          this.showNotification('Predicción calculada');
+        } catch (error) {
+          console.error('Error al obtener predicción:', error);
+          this.showNotification('Error al obtener predicción: ' + error.message, 'error');
+        }
+      }
+      
+      displayPrediction() {
+        if (!this.prediction) return;
+        
+        let html = '<h4>Posibles jugadas del oponente:</h4>';
+        
+        if (this.prediction.possibleMoves.length === 0) {
+          html += '<div class="prediction-item">No hay movimientos posibles para predecir</div>';
+        } else {
+          this.prediction.possibleMoves.forEach((move, index) => {
+            html += `
+              <div class="prediction-item">
+                <strong>Opción ${index + 1}:</strong> Mover ficha ${move.pieceId}
+                <div>Probabilidad: ${(this.prediction.probabilities[index] * 100).toFixed(1)}%</div>
+              </div>
+            `;
+          });
+        }
+        
+        if (this.prediction.recommendedDefense) {
+          html += `
+            <div class="prediction-item defense">
+              <strong>Defensa recomendada:</strong> ${this.prediction.recommendedDefense.advice}
+            </div>
+          `;
+        }
+        
+        this.elements.predictionResult.innerHTML = html;
+      }
+      
+      addToLog(message, playerId = null) {
+        // En esta versión con API, el log se maneja desde el servidor
+        // Este método es solo para referencia local
+        this.gameLog.push({ message, playerId });
+        if (this.gameLog.length > 50) this.gameLog.shift();
+        this.updateGameLog();
+      }
+    }
+
+    // Inicializar el juego cuando la página carga
+    document.addEventListener('DOMContentLoaded', () => {
+      window.game = new ParchisGame();
+    });
+  </script>
+</body>
+</html>
