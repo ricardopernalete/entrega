@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parchís Star - Edición Nocturna</title>
+  <title>Ludo Club - Edición Nocturna</title>
   <style>
     /* Estilos base */
     :root {
-      --color-primary: #e74c3c;
+      --color-primary: #4a6bff;
       --color-secondary: #2c3e50;
       --color-dark: #1a1a1a;
       --color-gray: #333333;
       --color-light-gray: #4d4d4d;
       --color-text: #f0f0f0;
       --color-text-light: #ffffff;
-      --color-accent: #c0392b;
+      --color-accent: #3a56d4;
       --color-success: #2ecc71;
       --color-warning: #f39c12;
       --color-error: #e74c3c;
@@ -65,7 +65,7 @@
       font-size: 3.5rem;
       margin-bottom: 2rem;
       color: var(--color-text-light);
-      text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+      text-shadow: 0 0 10px rgba(74, 107, 255, 0.5);
       letter-spacing: 2px;
       font-weight: 700;
     }
@@ -91,7 +91,7 @@
       min-width: 220px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+      box-shadow: 0 4px 15px rgba(74, 107, 255, 0.3);
       position: relative;
       overflow: hidden;
     }
@@ -110,7 +110,7 @@
 
     .btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+      box-shadow: 0 6px 20px rgba(74, 107, 255, 0.4);
     }
 
     .btn:hover::after {
@@ -172,7 +172,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: radial-gradient(circle at center, transparent 0%, rgba(231, 76, 60, 0.05) 100%);
+      background: radial-gradient(circle at center, transparent 0%, rgba(74, 107, 255, 0.05) 100%);
       pointer-events: none;
     }
 
@@ -212,12 +212,12 @@
 
     .piece.player-1 {
       background-color: var(--color-primary);
-      box-shadow: 0 0 10px rgba(231, 76, 60, 0.7);
+      box-shadow: 0 0 10px rgba(74, 107, 255, 0.7);
     }
 
     .piece.player-2 {
-      background-color: #3498db;
-      box-shadow: 0 0 10px rgba(52, 152, 219, 0.7);
+      background-color: #e74c3c;
+      box-shadow: 0 0 10px rgba(231, 76, 60, 0.7);
     }
 
     .piece.player-3 {
@@ -254,7 +254,7 @@
       font-weight: 600;
       font-size: 1.1rem;
       color: var(--color-primary);
-      text-shadow: 0 0 5px rgba(231, 76, 60, 0.5);
+      text-shadow: 0 0 5px rgba(74, 107, 255, 0.5);
     }
 
     .player-name {
@@ -357,12 +357,12 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, transparent 100%);
+      background: linear-gradient(135deg, rgba(74, 107, 255, 0.1) 0%, transparent 100%);
       pointer-events: none;
     }
 
     .powerup-card.active {
-      background-color: rgba(231, 76, 60, 0.2);
+      background-color: rgba(74, 107, 255, 0.2);
       border-color: var(--color-primary);
     }
 
@@ -415,8 +415,8 @@
     }
 
     .prediction-item.defense {
-      background-color: rgba(231, 76, 60, 0.1);
-      border-left-color: #e74c3c;
+      background-color: rgba(74, 107, 255, 0.1);
+      border-left-color: #4a6bff;
     }
 
     /* Log del juego */
@@ -461,7 +461,7 @@
     }
 
     .log-entry.player-2 {
-      color: #3498db;
+      color: #e74c3c;
     }
 
     /* Modales */
@@ -533,7 +533,7 @@
     .form-input:focus {
       outline: none;
       border-color: var(--color-primary);
-      box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.3);
+      box-shadow: 0 0 0 2px rgba(74, 107, 255, 0.3);
     }
 
     /* Loading spinner */
@@ -563,9 +563,9 @@
     }
 
     @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
-      70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(74, 107, 255, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(74, 107, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(74, 107, 255, 0); }
     }
 
     .pulse {
@@ -658,8 +658,8 @@
 <body>
   <!-- Pantalla de inicio -->
   <div id="startScreen" class="start-screen">
-    <h1>PARCHÍS STAR</h1>
-    <p>El juego clásico reinventado con un diseño moderno y potenciadores estratégicos</p>
+    <h1>LUDO CLUB</h1>
+    <p>El clásico juego de mesa reinventado con un diseño moderno y características estratégicas</p>
     <button id="newGameBtn" class="btn btn-primary">Nueva Partida</button>
     <button id="joinGameBtn" class="btn btn-secondary">Unirse a Partida</button>
   </div>
@@ -704,7 +704,7 @@
       
       <!-- Log del juego -->
       <div class="game-log" id="gameLog">
-        <div class="log-entry">Bienvenido a Parchís Star. ¡Que comience el juego!</div>
+        <div class="log-entry">Bienvenido a Ludo Club. ¡Que comience el juego!</div>
       </div>
     </div>
   </div>
@@ -754,15 +754,15 @@
 
   <script>
     // Constantes del juego
-    const PLAYER_COLORS = ['#e74c3c', '#3498db', '#f1c40f', '#2ecc71'];
+    const PLAYER_COLORS = ['#4a6bff', '#e74c3c', '#f1c40f', '#2ecc71'];
     const POWERUPS = {
-      double_dice: { name: 'Dado Doble', count: 2, color: '#e74c3c' },
-      shield: { name: 'Escudo', count: 1, color: '#3498db' },
+      double_dice: { name: 'Dado Doble', count: 2, color: '#4a6bff' },
+      shield: { name: 'Escudo', count: 1, color: '#e74c3c' },
       teleport: { name: 'Teletransporte', count: 1, color: '#9b59b6' }
     };
 
-    // Configuración de la API
-    const API_BASE_URL = 'https://tu-api-parchis.com/v1'; // Reemplazar con tu URL real
+    // Configuración de la API (simulada)
+    const API_BASE_URL = 'https://tu-api-ludo.com/v1'; // Reemplazar con tu URL real
     const API_ENDPOINTS = {
       createGame: '/games',
       joinGame: '/games/join',
@@ -773,84 +773,157 @@
       getPrediction: '/games/predict'
     };
 
-    // Clase para manejar las llamadas a la API
-    class ParchisAPI {
-      static async request(endpoint, method = 'GET', data = null, authToken = null) {
-        const url = API_BASE_URL + endpoint;
-        const headers = {
-          'Content-Type': 'application/json'
+    // Clase para manejar las llamadas a la API simulada
+    class LudoAPI {
+      static async request(endpoint, method = 'GET', data = null) {
+        // Simulamos una respuesta del servidor
+        console.log(`Llamando a ${endpoint}`, data);
+        
+        // Simulamos un retardo de red
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Respuestas simuladas para cada endpoint
+        switch(endpoint) {
+          case API_ENDPOINTS.createGame:
+            return {
+              gameId: 'GAME' + Math.random().toString(36).substr(2, 8).toUpperCase(),
+              playerId: 'PLAYER' + Math.random().toString(36).substr(2, 8).toUpperCase(),
+              players: [
+                { id: 'PLAYER' + Math.random().toString(36).substr(2, 8).toUpperCase(), 
+                  name: data.playerName, 
+                  color: PLAYER_COLORS[0] }
+              ],
+              gameState: this.generateInitialGameState(data.playerName)
+            };
+            
+          case API_ENDPOINTS.joinGame:
+            return {
+              gameId: data.gameCode,
+              playerId: 'PLAYER' + Math.random().toString(36).substr(2, 8).toUpperCase(),
+              players: [
+                { id: 'PLAYER1', name: "Jugador 1", color: PLAYER_COLORS[0] },
+                { id: 'PLAYER' + Math.random().toString(36).substr(2, 8).toUpperCase(), 
+                  name: data.playerName, 
+                  color: PLAYER_COLORS[1] }
+              ],
+              gameState: this.generateInitialGameState("Jugador 1", data.playerName)
+            };
+            
+          case API_ENDPOINTS.rollDice:
+            return {
+              diceValue: Math.floor(Math.random() * 6) + 1,
+              gameState: {
+                currentTurn: 0,
+                diceValue: Math.floor(Math.random() * 6) + 1,
+                pieces: [
+                  { id: 'P1', playerId: 'PLAYER1', position: { x: 10, y: 10 } },
+                  { id: 'P2', playerId: 'PLAYER1', position: { x: 20, y: 10 } },
+                  { id: 'P3', playerId: 'PLAYER2', position: { x: 10, y: 20 } },
+                  { id: 'P4', playerId: 'PLAYER2', position: { x: 20, y: 20 } }
+                ]
+              }
+            };
+            
+          case API_ENDPOINTS.makeMove:
+            return {
+              gameState: {
+                currentTurn: 1,
+                diceValue: 0,
+                pieces: [
+                  { id: 'P1', playerId: 'PLAYER1', position: { x: 15, y: 15 } },
+                  { id: 'P2', playerId: 'PLAYER1', position: { x: 20, y: 10 } },
+                  { id: 'P3', playerId: 'PLAYER2', position: { x: 10, y: 20 } },
+                  { id: 'P4', playerId: 'PLAYER2', position: { x: 20, y: 20 } }
+                ],
+                gameLog: [
+                  { message: "Jugador 1 movió la ficha P1", playerId: 'PLAYER1' }
+                ]
+              }
+            };
+            
+          case API_ENDPOINTS.usePowerup:
+            return {
+              gameState: {
+                powerups: {
+                  PLAYER1: {
+                    [data.powerupId]: { count: 0 }
+                  }
+                },
+                usedPowerups: {
+                  PLAYER1: {
+                    [data.powerupId]: { count: 1 }
+                  }
+                },
+                gameLog: [
+                  { message: `Jugador usó ${POWERUPS[data.powerupId]?.name || 'potenciador'}`, playerId: 'PLAYER1' }
+                ]
+              }
+            };
+            
+          case API_ENDPOINTS.getPrediction:
+            return {
+              possibleMoves: [
+                { pieceId: 'P3', move: "adelante" },
+                { pieceId: 'P4', move: "defensa" }
+              ],
+              probabilities: [0.6, 0.4],
+              recommendedDefense: {
+                advice: "Mover ficha P2 a posición defensiva",
+                probability: 0.8
+              }
+            };
+            
+          default:
+            return {
+              gameState: this.generateInitialGameState("Jugador 1", "Jugador 2")
+            };
+        }
+      }
+      
+      static generateInitialGameState(player1Name, player2Name = null) {
+        const state = {
+          currentTurn: 0,
+          diceValue: 0,
+          pieces: [
+            { id: 'P1', playerId: 'PLAYER1', position: { x: 10, y: 10 } },
+            { id: 'P2', playerId: 'PLAYER1', position: { x: 20, y: 10 } }
+          ],
+          powerups: {
+            PLAYER1: {
+              double_dice: { name: 'Dado Doble', count: 2 },
+              shield: { name: 'Escudo', count: 1 }
+            }
+          },
+          usedPowerups: {},
+          gameLog: [
+            { message: "¡Bienvenido a Ludo Club!", playerId: null },
+            { message: `${player1Name} se ha unido al juego`, playerId: 'PLAYER1' }
+          ]
         };
-
-        if (authToken) {
-          headers['Authorization'] = `Bearer ${authToken}`;
+        
+        if (player2Name) {
+          state.pieces.push(
+            { id: 'P3', playerId: 'PLAYER2', position: { x: 10, y: 20 } },
+            { id: 'P4', playerId: 'PLAYER2', position: { x: 20, y: 20 } }
+          );
+          state.powerups.PLAYER2 = {
+            teleport: { name: 'Teletransporte', count: 1 },
+            shield: { name: 'Escudo', count: 1 }
+          };
+          state.gameLog.push(
+            { message: `${player2Name} se ha unido al juego`, playerId: 'PLAYER2' }
+          );
         }
-
-        const config = {
-          method,
-          headers
-        };
-
-        if (data) {
-          config.body = JSON.stringify(data);
-        }
-
-        try {
-          const response = await fetch(url, config);
-          const result = await response.json();
-
-          if (!response.ok) {
-            throw new Error(result.message || 'Error en la solicitud');
-          }
-
-          return result;
-        } catch (error) {
-          console.error('Error en la solicitud API:', error);
-          throw error;
-        }
-      }
-
-      static async createGame(playerName, password = '') {
-        return this.request(API_ENDPOINTS.createGame, 'POST', {
-          playerName,
-          password
-        });
-      }
-
-      static async joinGame(gameCode, playerName, password = '') {
-        return this.request(API_ENDPOINTS.joinGame, 'POST', {
-          gameCode,
-          playerName,
-          password
-        });
-      }
-
-      static async getGameStatus(gameId, playerToken) {
-        return this.request(`${API_ENDPOINTS.gameStatus}/${gameId}`, 'GET', null, playerToken);
-      }
-
-      static async rollDice(gameId, playerToken) {
-        return this.request(`${API_ENDPOINTS.rollDice}/${gameId}`, 'POST', null, playerToken);
-      }
-
-      static async makeMove(gameId, pieceId, playerToken) {
-        return this.request(`${API_ENDPOINTS.makeMove}/${gameId}`, 'POST', { pieceId }, playerToken);
-      }
-
-      static async usePowerup(gameId, powerupId, playerToken) {
-        return this.request(`${API_ENDPOINTS.usePowerup}/${gameId}`, 'POST', { powerupId }, playerToken);
-      }
-
-      static async getPrediction(gameId, playerToken) {
-        return this.request(`${API_ENDPOINTS.getPrediction}/${gameId}`, 'GET', null, playerToken);
+        
+        return state;
       }
     }
 
     // Clase principal del juego
-    class ParchisGame {
+    class LudoGame {
       constructor() {
         this.gameId = null;
         this.playerId = null;
-        this.playerToken = null;
         this.players = [];
         this.currentTurn = 0;
         this.diceValue = 0;
@@ -859,7 +932,6 @@
         this.usedPowerups = {};
         this.gameLog = [];
         this.prediction = null;
-        this.socket = null;
         this.pollingInterval = null;
         
         this.initElements();
@@ -955,11 +1027,13 @@
         this.elements.createGameStatus.innerHTML = '<div class="spinner"></div> Creando partida...';
         
         try {
-          const result = await ParchisAPI.createGame(playerName, password);
+          const result = await LudoAPI.request(API_ENDPOINTS.createGame, 'POST', {
+            playerName,
+            password
+          });
           
           this.gameId = result.gameId;
           this.playerId = result.playerId;
-          this.playerToken = result.token;
           this.players = result.players;
           
           // Inicializar estado del juego
@@ -997,11 +1071,14 @@
         this.elements.joinGameStatus.innerHTML = '<div class="spinner"></div> Uniéndose a partida...';
         
         try {
-          const result = await ParchisAPI.joinGame(gameCode, playerName, password);
+          const result = await LudoAPI.request(API_ENDPOINTS.joinGame, 'POST', {
+            gameCode,
+            playerName,
+            password
+          });
           
           this.gameId = result.gameId;
           this.playerId = result.playerId;
-          this.playerToken = result.token;
           this.players = result.players;
           
           // Inicializar estado del juego
@@ -1049,8 +1126,8 @@
         // Configurar polling cada 3 segundos
         this.pollingInterval = setInterval(async () => {
           try {
-            const gameState = await ParchisAPI.getGameStatus(this.gameId, this.playerToken);
-            this.updateGameState(gameState);
+            const gameState = await LudoAPI.request(`${API_ENDPOINTS.gameStatus}/${this.gameId}`);
+            this.updateGameState(gameState.gameState);
           } catch (error) {
             console.error('Error al actualizar estado del juego:', error);
           }
@@ -1150,7 +1227,7 @@
                 <div class="powerup-name">${powerup.name}</div>
                 <div class="powerup-count">${powerup.count}</div>
               `;
-              powerupElement.style.borderColor = powerup.color || '#e74c3c';
+              powerupElement.style.borderColor = powerup.color || '#4a6bff';
               this.elements.myPowerups.appendChild(powerupElement);
             }
           });
@@ -1168,7 +1245,7 @@
                 <div class="powerup-name">${powerup.name}</div>
                 <div class="powerup-count">${powerup.count}</div>
               `;
-              powerupElement.style.borderColor = powerup.color || '#e74c3c';
+              powerupElement.style.borderColor = powerup.color || '#4a6bff';
               this.elements.opponentPowerups.appendChild(powerupElement);
             }
           });
@@ -1215,7 +1292,7 @@
         this.elements.rollDiceBtn.innerHTML = '<div class="spinner"></div>';
         
         try {
-          const result = await ParchisAPI.rollDice(this.gameId, this.playerToken);
+          const result = await LudoAPI.request(`${API_ENDPOINTS.rollDice}/${this.gameId}`, 'POST');
           this.diceValue = result.diceValue;
           
           // Verificar si se puede usar un potenciador de dado doble
@@ -1242,7 +1319,7 @@
         if (!this.isMyTurn() || this.diceValue === 0) return;
         
         try {
-          const result = await ParchisAPI.makeMove(this.gameId, pieceId, this.playerToken);
+          const result = await LudoAPI.request(`${API_ENDPOINTS.makeMove}/${this.gameId}`, 'POST', { pieceId });
           this.updateGameState(result.gameState);
         } catch (error) {
           console.error('Error al mover ficha:', error);
@@ -1254,7 +1331,7 @@
         if (!this.isMyTurn() || !this.powerups[this.playerId]?.[powerupId]?.count) return;
         
         try {
-          const result = await ParchisAPI.usePowerup(this.gameId, powerupId, this.playerToken);
+          const result = await LudoAPI.request(`${API_ENDPOINTS.usePowerup}/${this.gameId}`, 'POST', { powerupId });
           this.updateGameState(result.gameState);
           
           if (showLog) {
@@ -1268,7 +1345,7 @@
       
       async getPrediction() {
         try {
-          this.prediction = await ParchisAPI.getPrediction(this.gameId, this.playerToken);
+          this.prediction = await LudoAPI.request(`${API_ENDPOINTS.getPrediction}/${this.gameId}`, 'GET');
           this.displayPrediction();
           this.showNotification('Predicción calculada');
         } catch (error) {
@@ -1307,8 +1384,6 @@
       }
       
       addToLog(message, playerId = null) {
-        // En esta versión con API, el log se maneja desde el servidor
-        // Este método es solo para referencia local
         this.gameLog.push({ message, playerId });
         if (this.gameLog.length > 50) this.gameLog.shift();
         this.updateGameLog();
@@ -1317,7 +1392,7 @@
 
     // Inicializar el juego cuando la página carga
     document.addEventListener('DOMContentLoaded', () => {
-      window.game = new ParchisGame();
+      window.game = new LudoGame();
     });
   </script>
 </body>
